@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CuteForge | Editor web</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">CF</div>
+      <div>
+        <p class="title">CuteForge</p>
+        <p class="subtitle">CapCut-lite pro, FFmpeg nativo</p>
+      </div>
+    </div>
+    <div class="status">
+      <span id="healthBadge" class="badge">Chequeando backend...</span>
+      <div class="pill">FFmpeg via backend | Node + Express</div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-header">
+        <h2>1) Subir clips</h2>
+        <p>MP4 recomendado. Procesamiento pesado se hace en backend.</p>
+      </div>
+      <div class="upload-box">
+        <input id="fileInput" type="file" accept="video/mp4,video/quicktime,audio/mpeg,audio/mp3,audio/wav" multiple>
+        <button id="uploadBtn" class="btn primary">Subir a CuteForge</button>
+      </div>
+      <div id="clipList" class="clip-list"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>2) Timeline</h2>
+        <p>Define inicio/fin, texto, filtros y audio. La UI nunca procesa video pesado.</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-row">
+          <label>Inicio (s)</label>
+          <input id="startInput" type="range" min="0" max="0" value="0" step="0.1">
+          <span id="startLabel">0.0</span>
+        </div>
+        <div class="timeline-row">
+          <label>Fin (s)</label>
+          <input id="endInput" type="range" min="0" max="0" value="0" step="0.1">
+          <span id="endLabel">0.0</span>
+        </div>
+        <div class="timeline-row">
+          <label>Duración</label>
+          <span id="durationLabel">0.0s</span>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <h3>Texto</h3>
+          <input id="textValue" type="text" placeholder="Título, subtítulo, CTA...">
+          <div class="grid compact">
+            <div>
+              <label>X</label>
+              <input id="textX" type="number" value="50">
+            </div>
+            <div>
+              <label>Y</label>
+              <input id="textY" type="number" value="50">
+            </div>
+            <div>
+              <label>Tamaño</label>
+              <input id="fontSize" type="number" value="28">
+            </div>
+            <div>
+              <label>Color</label>
+              <input id="fontColor" type="text" value="white">
+            </div>
+          </div>
+          <div class="grid compact">
+            <div>
+              <label>Inicio texto</label>
+              <input id="textStart" type="number" value="0">
+            </div>
+            <div>
+              <label>Fin texto</label>
+              <input id="textEnd" type="number" value="0">
+            </div>
+          </div>
+          <button id="textBtn" class="btn">Aplicar texto</button>
+        </div>
+        <div>
+          <h3>Filtros</h3>
+          <label>Brillo</label>
+          <input id="brightness" type="range" min="-0.5" max="0.5" step="0.05" value="0">
+          <label>Contraste</label>
+          <input id="contrast" type="range" min="0.5" max="1.5" step="0.05" value="1">
+          <label class="checkbox"><input id="grayscale" type="checkbox"> Escala de grises</label>
+          <button id="filterBtn" class="btn">Aplicar filtros</button>
+        </div>
+        <div>
+          <h3>Audio</h3>
+          <label>Inicio audio</label>
+          <input id="audioStart" type="number" value="0">
+          <label>Fin audio</label>
+          <input id="audioEnd" type="number" value="0">
+          <label>Volumen</label>
+          <input id="volume" type="range" min="0" max="2" step="0.1" value="1">
+          <button id="audioBtn" class="btn">Ajustar audio</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="trimBtn" class="btn primary">Cortar (trim)</button>
+        <button id="concatBtn" class="btn">Unir clips</button>
+      </div>
+    </section>
+
+    <section class="panel preview">
+      <div class="panel-header">
+        <h2>3) Previsualizar y exportar</h2>
+        <p>La UI usa Web Worker para no bloquear. El render corre en backend FFmpeg.</p>
+      </div>
+      <video id="player" controls playsinline></video>
+      <div class="progress">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <div class="progress-meta">
+        <span id="jobLabel">Sin tareas en ejecución</span>
+        <a id="downloadLink" href="#" download class="btn ghost" style="display:none;">Descargar render</a>
+      </div>
+      <div id="log" class="log"></div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
